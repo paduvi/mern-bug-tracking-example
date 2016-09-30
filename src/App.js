@@ -56,14 +56,8 @@ var BugFilter = React.createClass({
 });
 
 var BugTable = React.createClass({
-    getInitialState: function () {
-        return {
-            bugs: this.props.bugs
-        }
-    },
     render: function () {
-        console.log(this.state.bugs);
-        var bugRows = this.state.bugs.map(bug=>(
+        var bugRows = this.props.bugs.map(bug=>(
             <BugRow data={bug} key={bug.id}/>
         ))
         return (

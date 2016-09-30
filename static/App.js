@@ -74,14 +74,8 @@ var BugFilter = React.createClass({
 var BugTable = React.createClass({
     displayName: 'BugTable',
 
-    getInitialState: function getInitialState() {
-        return {
-            bugs: this.props.bugs
-        };
-    },
     render: function render() {
-        console.log(this.state.bugs);
-        var bugRows = this.state.bugs.map(function (bug) {
+        var bugRows = this.props.bugs.map(function (bug) {
             return React.createElement(BugRow, { data: bug, key: bug.id });
         });
         return React.createElement(
