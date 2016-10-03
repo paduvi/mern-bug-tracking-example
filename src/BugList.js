@@ -3,46 +3,21 @@
  */
 var React = require('react');
 var $ = require('jquery');
+var withRouter = require('react-router').withRouter;
 
 var BugFilter = require('./BugFilter');
 var BugAdd = require('./BugAdd');
 
-var BugList = React.createClass({
-    getInitialState: function () {
-        return {
-            bugs: []
-        }
-    },
-    componentDidMount: function () {
-        $.ajax("/api/bugs").done(function (result) {
-            this.setState({
-                bugs: result
-            });
-        }.bind(this));
-    },
-    addBug: function (bug) {
-        $.ajax({
-            url: "/api/bugs",
-            method: "POST",
-            data: bug
-        }).done(function (data) {
-            var bugs = this.state.bugs.slice();
-            bugs.push(data);
-            this.setState({
-                bugs: bugs
-            });
-            $("input[name='owner']").val("");
-            $("input[name='title']").val("");
-        }.bind(this));
-    },
+var BugRow = React.createClass({
     render: function () {
         return (
-            <div>
-                <h1>Bug Tracker</h1>
-                <BugFilter />
-                <BugTable bugs={this.state.bugs}/>
-                <BugAdd addBug={this.addBug}/>
-            </div>
+            <tr>
+                <td>{this.props.data._id}</td>
+                <td>{this.props.data.status}</td>
+                <td>{this.props.data.priority}</td>
+                <td>{this.props.data.owner}</td>
+                <td>{this.props.data.title}</td>
+            </tr>
         )
     }
 });
@@ -71,18 +46,71 @@ var BugTable = React.createClass({
     }
 });
 
-var BugRow = React.createClass({
+var BugList = React.createClass({
+    getInitialState: function () {
+        return {
+            bugs: []
+        }
+    },
+    componentDidMount: function () {
+        this.loadData();
+    },
+    componentDidUpdate: function (prevProps) {
+        var oldQuery = prevProps.location.query;
+        var newQuery = this.props.location.query;
+        if (oldQuery.priority === newQuery.priority &&
+            oldQuery.status === newQuery.status) {
+            return;
+        }
+        this.loadData();
+    },
+    changeFilter: function (newFilter) {
+        this.props.router.push({
+            search: '?' + $.param(newFilter)
+        });
+    },
+    loadData: function () {
+        var query = this.props.location.query || {};
+        var filter = {
+            priority: query.priority,
+            status: query.status
+        };
+        $.ajax({
+            url: "/api/bugs",
+            method: "GET",
+            data: filter
+        }).done(function (result) {
+            this.setState({
+                bugs: result
+            });
+        }.bind(this));
+    },
+    addBug: function (bug) {
+        $.ajax({
+            url: "/api/bugs",
+            method: "POST",
+            data: bug
+        }).done(function (data) {
+            var bugsModified = this.state.bugs.concat(data);
+            this.setState({
+                bugs: bugsModified
+            });
+            $("input[name='owner']").val("");
+            $("input[name='title']").val("");
+        }.bind(this)).fail(function (xhr, status, err) {
+            console.log("Error adding bug:", err);
+        })
+    },
     render: function () {
         return (
-            <tr>
-                <td>{this.props.data._id}</td>
-                <td>{this.props.data.status}</td>
-                <td>{this.props.data.priority}</td>
-                <td>{this.props.data.owner}</td>
-                <td>{this.props.data.title}</td>
-            </tr>
+            <div>
+                <h1>Bug Tracker</h1>
+                <BugFilter applyFilter={this.changeFilter} initFilter={this.props.location.query}/>
+                <BugTable bugs={this.state.bugs}/>
+                <BugAdd addBug={this.addBug}/>
+            </div>
         )
     }
 });
 
-module.exports = BugList;
+module.exports = withRouter(BugList);

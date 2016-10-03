@@ -16,10 +16,15 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 app.get('/api/bugs', function (req, res) {
-    db.collection('bugs').find().toArray(function (err, bugs) {
+    let filter = {};
+    if (req.query.status)
+        filter.status = req.query.status;
+    if (req.query.priority)
+        filter.priority = req.query.priority;
+    db.collection('bugs').find(filter).toArray(function (err, bugs) {
         test.equal(null, err);
         res.json(bugs);
-    })
+    });
 });
 
 app.post('/api/bugs', function (req, res) {
