@@ -2,28 +2,51 @@
  * Created by Cho To Xau Tinh on 03-Oct-16.
  */
 var React = require('react');
-var $ = require('jquery');
+var RaisedButton = require('material-ui').RaisedButton;
+var Card = require('material-ui').Card;
+var CardHeader = require('material-ui').CardHeader;
+var CardText = require('material-ui').CardText;
+var Avatar = require('material-ui').Avatar;
+var Colors = require('material-ui/styles').colors;
+var TextField = require('material-ui').TextField;
+var FontAwesome = require('react-fontawesome');
 
 var BugAdd = React.createClass({
+    getInitialState: function () {
+        return ({owner: '', title: ''});
+    },
     addBug: function (e) {
         e.preventDefault();
-        let bug = {
+        this.props.addBug({
+            owner: this.state.owner,
+            title: this.state.title,
             status: 'New',
-            priority: 'P1',
-            owner: $("input[name='owner']").val(),
-            title: $("input[name='title']").val()
-        }
-        this.props.addBug(bug);
+            priority: 'P1'
+        });
+        this.state.owner = "";
+        this.state.title = "";
+    },
+    onChangeTitle: function (e) {
+        this.setState({title: e.target.value});
+    },
+    onChangeOwner: function (e) {
+        this.setState({owner: e.target.value});
     },
     render: function () {
+        var avatar = <Avatar backgroundColor={Colors.teal500} icon={<FontAwesome name="plus"></FontAwesome>}/>;
         return (
-            <div>
-                <form onSubmit={this.addBug}>
-                    <input type="text" name="owner" placeholder="Owner"/>
-                    <input type="text" name="title" placeholder="Title"/>
-                    <input type="submit" name="submit" value="Add Bug" onClick={this.addBug}/>
-                </form>
-            </div>
+            <Card initiallyExpanded={true}>
+                <CardHeader title="Create" subtitle="Add a new bug"
+                            actAsExpander={true} showExpandableButton={true}
+                            avatar={avatar}/>
+                <CardText expandable={true} style={{paddingTop: 0}}>
+                    <TextField hintText="Bug Title" value={this.state.title} onChange={this.onChangeTitle}/>
+                    <br />
+                    <TextField hintText="Owner" value={this.state.owner} onChange={this.onChangeOwner}/>
+                    <br />
+                    <RaisedButton label="Add" primary={true} onTouchTap={this.addBug}/>
+                </CardText>
+            </Card>
         );
     }
 });

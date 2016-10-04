@@ -2,7 +2,6 @@
  * Created by Cho To Xau Tinh on 03-Oct-16.
  */
 var React = require('react');
-var injectTapEventPlugin = require('react-tap-event-plugin');
 var RaisedButton = require('material-ui').RaisedButton;
 var SelectField = require('material-ui').SelectField;
 var MenuItem = require('material-ui').MenuItem;
@@ -10,10 +9,8 @@ var Card = require('material-ui').Card;
 var CardHeader = require('material-ui').CardHeader;
 var CardText = require('material-ui').CardText;
 var Avatar = require('material-ui').Avatar;
-var FontIcon = require('material-ui').FontIcon;
-var Colors = require('material-ui/lib/styles/colors');
-
-injectTapEventPlugin();
+var FontAwesome = require('react-fontawesome');
+var Colors = require('material-ui/styles').colors;
 
 var anyValue = '*';
 
@@ -44,8 +41,7 @@ var BugFilter = React.createClass({
     onChangePriority: function (e, index, value) {
         this.setState({priority: value});
     },
-    submitFilter: function (e) {
-        e.preventDefault();
+    submitFilter: function () {
         var newFilter = {};
         if (this.state.priority != anyValue) newFilter.priority = this.state.priority;
         if (this.state.status != anyValue) newFilter.status = this.state.status;
@@ -53,7 +49,7 @@ var BugFilter = React.createClass({
     },
     render: function () {
         var avatar = (
-            <Avatar backgroundColor={Colors.teal500} icon={<FontIcon className="fa fa-filter"></FontIcon>}></Avatar>
+            <Avatar backgroundColor={Colors.teal500} icon={<FontAwesome name='filter'/>}></Avatar>
         );
         return (
             <Card initiallyExpanded={true}>
@@ -62,25 +58,23 @@ var BugFilter = React.createClass({
                             avatar={avatar}
                 />
                 <CardText expandable={true} style={{paddingTop: 0}}>
-                    <form onSubmit={this.submitFilter}>
-                        <SelectField value={this.state.status} onChange={this.onChangeStatus}
-                                     floatingLabelText="Status">
-                            <MenuItem primaryText="(Any)" value={anyValue}/>
-                            <MenuItem primaryText="New" value="New"/>
-                            <MenuItem primaryText="Open" value="Open"/>
-                            <MenuItem primaryText="Closed" value="Closed"/>
-                        </SelectField>
-                        &nbsp;
-                        <SelectField value={this.state.priority} onChange={this.onChangePriority}
-                                     floatingLabelText="Priority">
-                            <MenuItem primaryText="(Any)" value={anyValue}/>
-                            <MenuItem primaryText="P1" value="P1"/>
-                            <MenuItem primaryText="P2" value="P2"/>
-                            <MenuItem primaryText="P3" value="P3"/>
-                        </SelectField>
-                        <br/>
-                        <RaisedButton label="Apply" onTouchTap={this.submitFilter}/>
-                    </form>
+                    <SelectField value={this.state.status} onChange={this.onChangeStatus}
+                                 floatingLabelText="Status">
+                        <MenuItem primaryText="(Any)" value={anyValue}/>
+                        <MenuItem primaryText="New" value="New"/>
+                        <MenuItem primaryText="Open" value="Open"/>
+                        <MenuItem primaryText="Closed" value="Closed"/>
+                    </SelectField>
+                    &nbsp;
+                    <SelectField value={this.state.priority} onChange={this.onChangePriority}
+                                 floatingLabelText="Priority">
+                        <MenuItem primaryText="(Any)" value={anyValue}/>
+                        <MenuItem primaryText="P1" value="P1"/>
+                        <MenuItem primaryText="P2" value="P2"/>
+                        <MenuItem primaryText="P3" value="P3"/>
+                    </SelectField>
+                    <br/>
+                    <RaisedButton label="Apply" onTouchTap={this.submitFilter}/>
                 </CardText>
             </Card>
         );

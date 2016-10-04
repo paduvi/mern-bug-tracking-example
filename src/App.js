@@ -7,6 +7,9 @@ var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var Redirect = require('react-router').Redirect;
 var MuiThemeProvider = require('material-ui').MuiThemeProvider;
+var injectTapEventPlugin = require('react-tap-event-plugin');
+
+injectTapEventPlugin();
 
 var BugList = require('./BugList');
 var BugEdit = require('./BugEdit');

@@ -5,20 +5,38 @@ var React = require('react');
 var $ = require('jquery');
 var withRouter = require('react-router').withRouter;
 var Link = require('react-router').Link;
+var Paper = require('material-ui').Paper;
+var Table = require('material-ui').Table;
+var TableBody = require('material-ui').TableBody;
+var TableHeader = require('material-ui').TableHeader;
+var TableHeaderColumn = require('material-ui').TableHeaderColumn;
+var TableRow = require('material-ui').TableRow;
+var TableRowColumn = require('material-ui').TableRowColumn;
+var Colors = require('material-ui/styles').colors;
+var AppBar = require('material-ui').AppBar;
 
 var BugFilter = require('./BugFilter');
 var BugAdd = require('./BugAdd');
 
 var BugRow = React.createClass({
+    getStyle: function (width, bug) {
+        var style = {height: 24};
+        if (width) style.width = width;
+        if (bug.priority == 'P1') style.color = 'red';
+        return style;
+    },
     render: function () {
+        var bug = this.props.bug;
         return (
-            <tr>
-                <td><Link to={'/bugs/' + this.props.bug._id}>{this.props.bug._id}</Link></td>
-                <td>{this.props.bug.status}</td>
-                <td>{this.props.bug.priority}</td>
-                <td>{this.props.bug.owner}</td>
-                <td>{this.props.bug.title}</td>
-            </tr>
+            <TableRow hoverable={true}>
+                <TableRowColumn style={this.getStyle(180, bug)}>
+                    <Link to={'/bugs/' + bug._id}>{bug._id}</Link>
+                </TableRowColumn>
+                <TableRowColumn style={this.getStyle(40, bug)}>{bug.status}</TableRowColumn>
+                <TableRowColumn style={this.getStyle(40, bug)}>{bug.priority}</TableRowColumn>
+                <TableRowColumn style={this.getStyle(60, bug)}>{bug.owner}</TableRowColumn>
+                <TableRowColumn style={this.getStyle(undefined, bug)}>{bug.title}</TableRowColumn>
+            </TableRow>
         )
     }
 });
@@ -29,20 +47,22 @@ var BugTable = React.createClass({
             <BugRow bug={bug} key={bug._id}/>
         ))
         return (
-            <table>
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Owner</th>
-                    <th>Title</th>
-                </tr>
-                </thead>
-                <tbody>
-                {bugRows}
-                </tbody>
-            </table>
+            <Paper zDepth={1} style={{marginTop: 10, marginBottom: 10}}>
+                <Table>
+                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                        <TableRow style={{backgroundColor: Colors.lightBlueA700}}>
+                            <TableHeaderColumn style={{width: 180, color: 'white'}}>Id</TableHeaderColumn>
+                            <TableHeaderColumn style={{width: 40, color: 'white'}}>Status</TableHeaderColumn>
+                            <TableHeaderColumn style={{width: 40, color: 'white'}}>Priority</TableHeaderColumn>
+                            <TableHeaderColumn style={{width: 60, color: 'white'}}>Owner</TableHeaderColumn>
+                            <TableHeaderColumn style={{color: 'white'}}>Title</TableHeaderColumn>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody stripedRows={true}>
+                        {bugRows}
+                    </TableBody>
+                </Table>
+            </Paper>
         );
     }
 });
@@ -96,8 +116,6 @@ var BugList = React.createClass({
             this.setState({
                 bugs: bugsModified
             });
-            $("input[name='owner']").val("");
-            $("input[name='title']").val("");
         }.bind(this)).fail(function (xhr, status, err) {
             console.log("Error adding bug:", err);
         })
@@ -105,7 +123,7 @@ var BugList = React.createClass({
     render: function () {
         return (
             <div>
-                <h1>Bug Tracker</h1>
+                <AppBar title="React Bug Tracker" showMenuIconButton={false}/>
                 <BugFilter applyFilter={this.changeFilter} initFilter={this.props.location.query}/>
                 <BugTable bugs={this.state.bugs}/>
                 <BugAdd addBug={this.addBug}/>
