@@ -33,7 +33,7 @@ var BugAdd = React.createClass({
         this.setState({owner: e.target.value});
     },
     render: function () {
-        var avatar = <Avatar backgroundColor={Colors.teal500} icon={<FontIcon className="fa fa-filter"/>}/>;
+        var avatar = <Avatar backgroundColor={Colors.teal500} icon={<FontIcon className="fa fa-plus"/>}/>;
         return (
             <Card initiallyExpanded={true}>
                 <CardHeader title="Create" subtitle="Add a new bug"
