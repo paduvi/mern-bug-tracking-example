@@ -3,11 +3,22 @@
  */
 var React = require('react');
 var $ = require('jquery');
-var Link = require('react-router').Link;
+var RaisedButton = require('material-ui').RaisedButton;
+var FlatButton = require('material-ui').FlatButton;
+var Card = require('material-ui').Card;
+var CardHeader = require('material-ui').CardHeader;
+var Avatar = require('material-ui').Avatar;
+var FontAwesome = require('react-fontawesome');
+var Colors = require('material-ui/styles').colors;
+var CardText = require('material-ui').CardText;
+var SelectField = require('material-ui').SelectField;
+var MenuItem = require('material-ui').MenuItem;
+var TextField = require('material-ui').TextField;
+var Snackbar = require('material-ui').Snackbar;
 
 var BugEdit = React.createClass({
     getInitialState: function () {
-        return {}
+        return {successVisible: false};
     },
     componentDidMount: function () {
         this.loadData();
@@ -22,11 +33,11 @@ var BugEdit = React.createClass({
             this.setState(bug)
         }.bind(this));
     },
-    onChangeStatus: function (e) {
-        this.setState({status: e.target.value});
+    onChangeStatus: function (e, i, value) {
+        this.setState({status: value});
     },
-    onChangePriority: function (e) {
-        this.setState({priority: e.target.value});
+    onChangePriority: function (e, i, value) {
+        this.setState({priority: value});
     },
     onChangeOwner: function (e) {
         this.setState({owner: e.target.value});
@@ -34,8 +45,13 @@ var BugEdit = React.createClass({
     onChangeTitle: function (e) {
         this.setState({title: e.target.value});
     },
-    onSubmit: function (e) {
-        e.preventDefault();
+    showSuccessMessage: function () {
+        this.setState({successVisible: true});
+    },
+    dismissSuccessMessage: function () {
+        this.setState({successVisible: false});
+    },
+    onSubmit: function () {
         var bug = {
             status: this.state.status,
             priority: this.state.priority,
@@ -48,47 +64,49 @@ var BugEdit = React.createClass({
             data: bug
         }).done(function (data) {
             this.setState(data);
+            this.showSuccessMessage();
         }.bind(this)).fail(function (xhr, status, err) {
             console.log("Error editing bug:", err);
         })
     },
     render: function () {
+        var avatar = <Avatar backgroundColor={Colors.teal500}
+                             icon={<FontAwesome name="bug"></FontAwesome>}></Avatar>;
         return (
-            <div>
-                <h4>Edit bug {this.state._id}</h4>
-                <form onSubmit={this.onSubmit}>
-                    <div>
-                        <label htmlFor="status">Status:</label>
-                        <select value={this.state.status} name="status" id="status" onChange={this.onChangeStatus}>
-                            <option value="">(Any)</option>
-                            <option value="New">New</option>
-                            <option value="Open">Open</option>
-                            <option value="Closed">Closed</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label htmlFor="priority">Priority:</label>
-                        <select value={this.state.priority} name="priority" id="priority"
-                                onChange={this.onChangePriority}>
-                            <option value="">(Any)</option>
-                            <option value="P1">P1</option>
-                            <option value="P2">P2</option>
-                            <option value="P3">P3</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label htmlFor="owner">Owner:</label>
-                        <input type="text" name="owner" id="owner" value={this.state.owner}
-                               onChange={this.onChangeOwner}/>
-                    </div>
-                    <div>
-                        <label htmlFor="title">Title:</label>
-                        <input type="text" name="title" id="title" value={this.state.title}
-                               onChange={this.onChangeTitle}/>
-                    </div>
-                    <button onClick={this.onSubmit}>Submit</button>
-                    <Link to="/bugs">Back to Bug List</Link>
-                </form>
+            <div style={{maxWidth: 800}}>
+                <Card>
+                    <CardHeader title="Edit Bug" subtitle={this.props.params.id}
+                                avatar={avatar}/>
+                    <CardText>
+                        <SelectField fullWidth={true} value={this.state.priority} onChange={this.onChangePriority}
+                                     floatingLabelText="Priority">
+                            <MenuItem value="P1" primaryText="P1"/>
+                            <MenuItem value="P2" primaryText="P2"/>
+                            <MenuItem value="P3" primaryText="P3"/>
+                        </SelectField>
+                        <br/>
+                        <SelectField fullWidth={true} value={this.state.status} onChange={this.onChangeStatus}
+                                     floatingLabelText="Status">
+                            <MenuItem value="New" primaryText="New"/>
+                            <MenuItem value="Open" primaryText="Open"/>
+                            <MenuItem value="Closed" primaryText="Closed"/>
+                        </SelectField>
+                        <br/>
+                        <TextField fullWidth={true} floatingLabelText="Bug Title" multiLine={true}
+                                   value={this.state.title} onChange={this.onChangeTitle}/>
+                        <br/>
+                        <TextField fullWidth={true} floatingLabelText="Owner"
+                                   value={this.state.owner} onChange={this.onChangeOwner}/>
+                        <br/>
+                        <RaisedButton label="Save" primary={true} onTouchTap={this.onSubmit}/>
+                        <FlatButton label="Back to Bug List" href="/#/bugs"
+                                    style={{verticalAlign: 'top'}}/>
+                        <Snackbar open={this.state.successVisible} message="Changes saved, thank you."
+                                  autoHideDuration={5000} action="ok"
+                                  onActionTouchTap={this.dismissSuccessMessage}
+                                  onRequestClose={this.dismissSuccessMessage}/>
+                    </CardText>
+                </Card>
             </div>
         )
     }

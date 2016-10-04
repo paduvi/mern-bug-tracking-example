@@ -39,8 +39,8 @@ function bundleFile(watch) {
             })
             .pipe(source('bundle.js'))
             .pipe(gulp.dest('static/'))
-            .on('end', function () {
-                console.log("Bundle updated, success");
+            .on('finish', function () {
+                console.log("Bundle updated successfully at " + new Date());
             });
     };
 

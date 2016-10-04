@@ -30,7 +30,8 @@ var BugRow = React.createClass({
         return (
             <TableRow hoverable={true}>
                 <TableRowColumn style={this.getStyle(180, bug)}>
-                    <Link to={'/bugs/' + bug._id}>{bug._id}</Link>
+                    <Link to={'/bugs/' + bug._id}
+                          style={{textDecoration: "none", cursor: "pointer"}}>{bug._id}</Link>
                 </TableRowColumn>
                 <TableRowColumn style={this.getStyle(40, bug)}>{bug.status}</TableRowColumn>
                 <TableRowColumn style={this.getStyle(40, bug)}>{bug.priority}</TableRowColumn>

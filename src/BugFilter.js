@@ -55,8 +55,7 @@ var BugFilter = React.createClass({
             <Card initiallyExpanded={true}>
                 <CardHeader title="Filter" subtitle="Show a subset of records"
                             actAsExpander={true} showExpandableButton={true}
-                            avatar={avatar}
-                />
+                            avatar={avatar}/>
                 <CardText expandable={true} style={{paddingTop: 0}}>
                     <SelectField value={this.state.status} onChange={this.onChangeStatus}
                                  floatingLabelText="Status">
@@ -74,7 +73,7 @@ var BugFilter = React.createClass({
                         <MenuItem primaryText="P3" value="P3"/>
                     </SelectField>
                     <br/>
-                    <RaisedButton label="Apply" onTouchTap={this.submitFilter}/>
+                    <RaisedButton label="Apply" onTouchTap={this.submitFilter} backgroundColor={Colors.teal300}/>
                 </CardText>
             </Card>
         );
