@@ -9,7 +9,7 @@ var Card = require('material-ui').Card;
 var CardHeader = require('material-ui').CardHeader;
 var CardText = require('material-ui').CardText;
 var Avatar = require('material-ui').Avatar;
-var FontAwesome = require('react-fontawesome');
+var FontIcon = require('material-ui').FontIcon;
 var Colors = require('material-ui/styles').colors;
 
 var anyValue = '*';
@@ -49,7 +49,7 @@ var BugFilter = React.createClass({
     },
     render: function () {
         var avatar = (
-            <Avatar backgroundColor={Colors.teal500} icon={<FontAwesome name='filter'/>}></Avatar>
+            <Avatar backgroundColor={Colors.teal500} icon={<FontIcon className='fa fa-filter'/>}></Avatar>
         );
         return (
             <Card initiallyExpanded={true}>

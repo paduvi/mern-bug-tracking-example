@@ -9,7 +9,7 @@ var CardText = require('material-ui').CardText;
 var Avatar = require('material-ui').Avatar;
 var Colors = require('material-ui/styles').colors;
 var TextField = require('material-ui').TextField;
-var FontAwesome = require('react-fontawesome');
+var FontIcon = require('material-ui').FontIcon;
 
 var BugAdd = React.createClass({
     getInitialState: function () {
@@ -33,7 +33,7 @@ var BugAdd = React.createClass({
         this.setState({owner: e.target.value});
     },
     render: function () {
-        var avatar = <Avatar backgroundColor={Colors.teal500} icon={<FontAwesome name="plus"></FontAwesome>}/>;
+        var avatar = <Avatar backgroundColor={Colors.teal500} icon={<FontIcon className="fa fa-filter"/>}/>;
         return (
             <Card initiallyExpanded={true}>
                 <CardHeader title="Create" subtitle="Add a new bug"

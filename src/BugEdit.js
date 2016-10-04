@@ -8,7 +8,7 @@ var FlatButton = require('material-ui').FlatButton;
 var Card = require('material-ui').Card;
 var CardHeader = require('material-ui').CardHeader;
 var Avatar = require('material-ui').Avatar;
-var FontAwesome = require('react-fontawesome');
+var FontIcon = require('material-ui').FontIcon;
 var Colors = require('material-ui/styles').colors;
 var CardText = require('material-ui').CardText;
 var SelectField = require('material-ui').SelectField;
@@ -71,7 +71,7 @@ var BugEdit = React.createClass({
     },
     render: function () {
         var avatar = <Avatar backgroundColor={Colors.teal500}
-                             icon={<FontAwesome name="bug"></FontAwesome>}></Avatar>;
+                             icon={<FontIcon className="fa fa-bug"/>}></Avatar>;
         return (
             <div style={{maxWidth: 800}}>
                 <Card>

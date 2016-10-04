@@ -25,7 +25,6 @@
     "material-ui": "^0.15.4",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-fontawesome": "^1.2.0",
     "react-router": "^2.8.1",
     "react-tap-event-plugin": "^1.0.0",
     "vinyl-buffer": "^1.0.0",
