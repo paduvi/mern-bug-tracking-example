@@ -4,6 +4,7 @@
 var React = require('react');
 var $ = require('jquery');
 var withRouter = require('react-router').withRouter;
+var Link = require('react-router').Link;
 
 var BugFilter = require('./BugFilter');
 var BugAdd = require('./BugAdd');
@@ -12,11 +13,11 @@ var BugRow = React.createClass({
     render: function () {
         return (
             <tr>
-                <td>{this.props.data._id}</td>
-                <td>{this.props.data.status}</td>
-                <td>{this.props.data.priority}</td>
-                <td>{this.props.data.owner}</td>
-                <td>{this.props.data.title}</td>
+                <td><Link to={'/bugs/' + this.props.bug._id}>{this.props.bug._id}</Link></td>
+                <td>{this.props.bug.status}</td>
+                <td>{this.props.bug.priority}</td>
+                <td>{this.props.bug.owner}</td>
+                <td>{this.props.bug.title}</td>
             </tr>
         )
     }
@@ -25,7 +26,7 @@ var BugRow = React.createClass({
 var BugTable = React.createClass({
     render: function () {
         var bugRows = this.props.bugs.map(bug=>(
-            <BugRow data={bug} key={bug._id}/>
+            <BugRow bug={bug} key={bug._id}/>
         ))
         return (
             <table>

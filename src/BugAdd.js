@@ -8,8 +8,8 @@ var BugAdd = React.createClass({
     addBug: function (e) {
         e.preventDefault();
         let bug = {
-            status: 'new',
-            priority: 1,
+            status: 'New',
+            priority: 'P1',
             owner: $("input[name='owner']").val(),
             title: $("input[name='title']").val()
         }
