@@ -3,7 +3,9 @@
  */
 var gulp = require('gulp');
 var browserify = require('browserify');
+var uglify = require('gulp-uglify');
 var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var watchify = require('watchify');
 
 var production = process.env.NODE_ENV === 'production';
@@ -37,7 +39,9 @@ function bundleFile(watch) {
                 console.error(err.codeFrame);
                 this.emit('end');
             })
-            .pipe(source('bundle.js'))
+            .pipe(source('bundle.js')) // gives streaming vinyl file object
+            .pipe(buffer()) // <----- convert from streaming to buffered vinyl file object
+            .pipe(uglify()) // now gulp-uglify works
             .pipe(gulp.dest('static/'))
             .on('finish', function () {
                 console.log("Bundle updated successfully at " + new Date());
